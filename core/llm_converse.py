@@ -18,3 +18,9 @@ def call_model(user_query: str) -> str:
         return response.text or ""
     except Exception as e:
         return f'{{"action": "answer", "data": "Model error: {str(e)}"}}'
+
+
+def get_embeddings(text: str):
+    # currently placeholder
+    embeds = text
+    return embeds
