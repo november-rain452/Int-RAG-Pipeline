@@ -1,26 +1,36 @@
-from config import GEMINIAPIKEY
+from core.config import GEMINIAPIKEY, EMBEDDINGKEY
 from google import genai
 from google.genai import types
-from agent import sys_prompt
+from agent.sys_prompt import SYSTEM_PROMPT
+from schema.agent_json import ResponseSchema
 
 client = genai.Client(api_key=GEMINIAPIKEY)
+embed_client = genai.Client(api_key=EMBEDDINGKEY)
+
 model = "gemini-3-flash-preview"
+embedding_model = "gemini-embedding-2"
+
 config = types.GenerateContentConfig(
-    system_instruction=sys_prompt.SYSTEM_PROMPT, response_mime_type="application/json"
+    system_instruction=SYSTEM_PROMPT,
+    response_mime_type="application/json",
+    response_schema=ResponseSchema,
 )
 
 
-def call_model(user_query: str) -> str:
+def call_model(user_query: str) -> ResponseSchema:
     try:
         response = client.models.generate_content(
             model=model, contents=user_query, config=config
         )
-        return response.text or ""
+        return ResponseSchema.model_validate_json(response.text)
     except Exception as e:
         return f'{{"action": "answer", "data": "Model error: {str(e)}"}}'
 
 
 def get_embeddings(text: str):
-    # currently placeholder
-    embeds = text
-    return embeds
+    try:
+        embeds = embed_client.models.embed_content(model=embedding_model, contents=text)
+        print(embeds.embeddings[0].values)
+        return embeds.embeddings[0].values
+    except Exception as e:
+        raise RuntimeError(f"Embedding error: {e}")
