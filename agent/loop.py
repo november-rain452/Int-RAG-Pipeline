@@ -12,7 +12,7 @@ def run_agent(query: str) -> str:
             print(parsed["data"])
             return
 
-        elif parsed["rag_tool"]:
+        elif parsed["action"] == "rag_tool":
             context = rag_wrap_tool(parsed["data"])
             query = f"Context :\n {context}\n\n Question: {query}"
             continue
