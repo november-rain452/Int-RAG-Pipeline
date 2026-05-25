@@ -1,11 +1,19 @@
 import pymupdf
+from pathlib import Path
+from schema.data_ingestion_schema import Document
 
 
-def load_pdf(file_path: str) -> dict:
-    doc = pymupdf.open(file_path)
-    text = ""
+def load_pdf(file_path: str) -> Document:
 
-    for page in doc:
-        text += page.get_text()
+    path = Path(file_path).resolve()
 
-    return {"text": text, "source": file_path, "type": "pdf"}
+    if not path.exists():
+        raise FileNotFoundError(f"{path} not found")
+
+    with pymupdf.open(str(path)) as doc:
+        text = ""
+
+        for page in doc:
+            text += page.get_text() + "\n\n"
+
+    return Document(text=text, source=str(path), filename=path.name, type="pdf")
