@@ -23,7 +23,7 @@ Response format:
 }
 
 Rules:
-- If action = "answer", "data" is the final answer
-- If action = "rag_tool", "data" is the query to send to the tool
-- Do not include anything outside the JSON
+- You MUST call rag_tool at most once
+- After receiving context, you MUST answer
+- Never call rag_tool more than once
 """
