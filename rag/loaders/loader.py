@@ -1,6 +1,6 @@
 from pathlib import Path
-from md_loader import load_markdown
-from pdf_loader import load_pdf
+from .md_loader import load_markdown
+from .pdf_loader import load_pdf
 from schema.data_ingestion_schema import Document
 
 

@@ -1,5 +1,5 @@
-from embed import embed_text
-from store import get_store
+from .embed import embed_text
+from .store import get_store
 from utils.similarity import cosine_similarity
 
 
@@ -9,7 +9,7 @@ def retrieve(query: str, top_k=3):
 
     scores = []
 
-    for chunk, vec in store:
+    for chunk, vec, _ in store:
         score = cosine_similarity(query_vec, vec)
         scores.append((score, chunk))
 

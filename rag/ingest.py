@@ -1,8 +1,8 @@
-from embed import embed_text
-from store import add_to_store
-from chunk import chunk_text
-from preprocess import clean_pdf, clean_markdown
-from loaders.loader import load_documents
+from .embed import embed_text
+from .store import add_to_store
+from .chunk import chunk_text
+from .preprocess import clean_pdf, clean_markdown
+from .loaders.loader import load_documents
 
 
 def ingest(directory: str):
